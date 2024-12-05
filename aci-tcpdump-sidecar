@@ -1,0 +1,42 @@
+apiVersion: 2019-12-01
+location: eastus
+name: curl-and-tcpdump-2
+properties:
+  containers:
+    - name: curl-container ##main container
+      properties:
+        image: 20241025.azurecr.io/curl:latest
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 1.5
+        command:
+          - "curl"
+          - "https://www.google.com"
+    - name: hellofiles ##tcpdump sidecar
+      properties:
+        image: mcr.microsoft.com/azuredocs/aci-hellofiles
+        ports:
+        - port: 80
+        resources:
+          requests:
+            cpu: 1.0
+            memoryInGB: 1.5
+        command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            yum install -y tcpdump
+            tcpdump -i any -w /aci/logs/packets-1.pcap
+        volumeMounts:
+        - mountPath: /aci/logs/
+          name: filesharevolume
+  osType: Linux
+  restartPolicy: Never
+  volumes:
+  - name: filesharevolume
+    azureFile:
+      sharename: aci-tcpdump-20241125 #Your azure file share name
+      storageAccountName: acitcptump #Your storage account name
+      storageAccountKey: asdfasdfasdfAFEREWRLERHlkj=====sadflkasdlf #Your storage account access key
+type: Microsoft.ContainerInstance/containerGroups
