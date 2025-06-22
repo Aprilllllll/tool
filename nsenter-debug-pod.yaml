@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debugger
+spec:
+  nodeName: aks-nodepool1-25091044-vmss000000 #replace with your own node name
+  hostPID: true
+  hostNetwork: true
+  containers:
+  - securityContext:
+       privileged: true
+    name: nsenter
+    image: docker.io/library/alpine
+    stdin: true
+    stdinOnce: true
+    tty: true
+    command: ["nsenter", "--target", "1", "--mount", "--uts", "--ipc", "--net", "--pid", "--", "sudo", "bash", "-l"]
