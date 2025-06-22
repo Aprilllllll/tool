@@ -86,4 +86,4 @@ Example:
 https://learn.microsoft.com/en-us/azure/aks/workload-identity-deploy-cluster
 https://github.com/Azure/azure-cli/issues/24756
 
-![image](https://github.com/user-attachments/assets/94b5e9f0-1e6b-4c74-a7d2-dc87498e138f)
+
