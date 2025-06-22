@@ -36,11 +36,13 @@ Record the client ID here
 
 6. Now create a role assignment of subscription Contributor for the managed identity bond with federation identity, so we can use it to login:
 
+<img width="864" alt="6" src="https://github.com/user-attachments/assets/682c4dfa-81cd-4a0f-ba19-3ba5e02a1f69" />
 
 [Login with MI in pod shell]
 
 7. By now we have everything setup, we can create a pod running azurecli to test if our federation identity and role assignment work, you may use this pod template
 
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -56,7 +58,7 @@ spec:
       - sleep
       - "infinity"
   serviceAccountName: <service account name>
-
+```
 
 
 8. Enter pod shell:
