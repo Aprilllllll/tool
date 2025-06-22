@@ -59,22 +59,31 @@ spec:
       - "infinity"
   serviceAccountName: <service account name>
 ```
+Example:
+<img width="427" alt="7" src="https://github.com/user-attachments/assets/7164defd-f25f-4078-87b3-0dc775dea59a" />
 
 
 8. Enter pod shell:
 
- 
+<img width="581" alt="8" src="https://github.com/user-attachments/assets/a22f9060-d3b5-4042-af8d-980a11012bc0" />
+
 9. Get the token at /var/run/secrets/azure/token/azure-identity-token
 
- 
+<img width="824" alt="9" src="https://github.com/user-attachments/assets/d4bab181-f34f-439f-a048-a127f57448d6" />
+
 10. Use command to login
 #az login --service-principal -u <MI client ID> --tenant <Tenant ID> --federated-token <token from step 9>
 
+<img width="656" alt="10" src="https://github.com/user-attachments/assets/ecfea82c-7873-4b3a-a3e0-18d01edcd748" />
 
 11. Login succeed:
 
+<img width="549" alt="11" src="https://github.com/user-attachments/assets/25ebd264-8a38-426e-b4a0-5f9048a11077" />
+
 
 [Reference]
+
 https://learn.microsoft.com/en-us/azure/aks/workload-identity-deploy-cluster
 https://github.com/Azure/azure-cli/issues/24756
+
 ![image](https://github.com/user-attachments/assets/94b5e9f0-1e6b-4c74-a7d2-dc87498e138f)
