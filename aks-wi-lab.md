@@ -1,1 +1,71 @@
 
+[Purpose]
+
+This article will help you go through enabling workload identity in an AKS cluster and use it's benefit to run az login in a pod that use configured service account
+
+[Tutorial]
+
+[Enable workload identity Addon]
+1. Create or update an AKS cluster with workload identity addon with flag '--enable-oidc-issuer' and '--enable-workload-identity':
+<img width="1208" alt="1" src="https://github.com/user-attachments/assets/37557377-d2b2-4c4f-bbad-3b801f3c327e" />
+
+
+2. Once done, get the oidc issuer url by #az aks show -g <group name> -n <cluster name> --query "oidcIssuerProfile.issuerUrl" -o tsv
+<img width="1076" alt="2" src="https://github.com/user-attachments/assets/b79ace12-9200-497c-97ce-1f3bb456139e" />
+
+[Create federation identity]
+3. Create a managed identity by #az identity create --name <identity name> --resource-group <resource group> --location <location> --subscription <subscription>
+
+<img width="1207" alt="3" src="https://github.com/user-attachments/assets/020f9004-3c3b-4a2d-9a03-2772dc143a86" />
+Record the client ID here
+
+[Create service account]
+4. Create a service account with annotation azure.workload.identity/client-id: <managed identity client id>
+
+
+5. Create federation identity credential so AKS can work as an OIDC issuer:
+#az identity federated-credential create --name <FEDERATED_IDENTITY_CREDENTIAL_NAME> --identity-name <managed identity name> --resource-group <group name> --issuer <aks oidc issuer url> --subject system:serviceaccount:<service account namespace>:<service account name> --audience api://AzureADTokenExchange
+
+
+[Make role assignment to allow login with MI]
+6. Now create a role assignment of subscription Contributor for the managed identity bond with federation identity, so we can use it to login:
+
+
+[Login with MI in pod shell]
+7. By now we have everything setup, we can create a pod running azurecli to test if our federation identity and role assignment work, you may use this pod template
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: azurecli2
+  namespace: default
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  containers:
+  - name: azurecli
+    image: mcr.microsoft.com/azure-cli:2.49.0
+    command:
+      - sleep
+      - "infinity"
+  serviceAccountName: <service account name>
+
+
+
+8. Enter pod shell:
+
+ 
+9. Get the token at /var/run/secrets/azure/token/azure-identity-token
+
+ 
+10. Use command to login
+#az login --service-principal -u <MI client ID> --tenant <Tenant ID> --federated-token <token from step 9>
+
+
+11. Login succeed:
+
+
+[Reference]
+https://learn.microsoft.com/en-us/azure/aks/workload-identity-deploy-cluster
+https://github.com/Azure/azure-cli/issues/24756
+![image](https://github.com/user-attachments/assets/94b5e9f0-1e6b-4c74-a7d2-dc87498e138f)
