@@ -14,24 +14,31 @@ This article will help you go through enabling workload identity in an AKS clust
 <img width="1076" alt="2" src="https://github.com/user-attachments/assets/b79ace12-9200-497c-97ce-1f3bb456139e" />
 
 [Create federation identity]
+
 3. Create a managed identity by #az identity create --name <identity name> --resource-group <resource group> --location <location> --subscription <subscription>
 
 <img width="1207" alt="3" src="https://github.com/user-attachments/assets/020f9004-3c3b-4a2d-9a03-2772dc143a86" />
 Record the client ID here
 
 [Create service account]
-4. Create a service account with annotation azure.workload.identity/client-id: <managed identity client id>
 
+4. Create a service account with annotation azure.workload.identity/client-id: <managed identity client id>
+<img width="693" alt="4" src="https://github.com/user-attachments/assets/21f07814-9082-4be1-8686-33fe640db557" />
 
 5. Create federation identity credential so AKS can work as an OIDC issuer:
 #az identity federated-credential create --name <FEDERATED_IDENTITY_CREDENTIAL_NAME> --identity-name <managed identity name> --resource-group <group name> --issuer <aks oidc issuer url> --subject system:serviceaccount:<service account namespace>:<service account name> --audience api://AzureADTokenExchange
 
+<img width="1207" alt="5" src="https://github.com/user-attachments/assets/29bded20-7b31-4428-9b11-abd51e06a7f3" />
+
+
 
 [Make role assignment to allow login with MI]
+
 6. Now create a role assignment of subscription Contributor for the managed identity bond with federation identity, so we can use it to login:
 
 
 [Login with MI in pod shell]
+
 7. By now we have everything setup, we can create a pod running azurecli to test if our federation identity and role assignment work, you may use this pod template
 
 apiVersion: v1
