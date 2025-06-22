@@ -1,11 +1,11 @@
 
-[Purpose]
+# [Purpose]
 
 This article will help you go through enabling workload identity in an AKS cluster and use it's benefit to run az login in a pod that use configured service account
 
-[Tutorial]
+# [Tutorial]
 
-[Enable workload identity Addon]
+## [Enable workload identity Addon]
 1. Create or update an AKS cluster with workload identity addon with flag '--enable-oidc-issuer' and '--enable-workload-identity':
 <img width="1208" alt="1" src="https://github.com/user-attachments/assets/37557377-d2b2-4c4f-bbad-3b801f3c327e" />
 
@@ -81,7 +81,7 @@ Example:
 <img width="549" alt="11" src="https://github.com/user-attachments/assets/25ebd264-8a38-426e-b4a0-5f9048a11077" />
 
 
-[Reference]
+# [Reference]
 
 https://learn.microsoft.com/en-us/azure/aks/workload-identity-deploy-cluster
 https://github.com/Azure/azure-cli/issues/24756
